@@ -19,9 +19,14 @@ const User = require('../models/User');
  *     User:
  *       type: object
  *       required:
+ *         - nombreUsuario
  *         - email
  *         - password
  *       properties:
+ *         nombreUsuario:
+ *           type: string
+ *           format: nombreUsuario
+ *           description: Nombre del usuario
  *         email:
  *           type: string
  *           format: email
@@ -31,7 +36,7 @@ const User = require('../models/User');
  *           format: password
  *           description: Contraseña del usuario
  */
-
+ 
 /**
  * @swagger
  * /api/auth/register:
@@ -52,7 +57,7 @@ const User = require('../models/User');
  */
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { nombreUsuario,email, password } = req.body;
 
     // Verificar si el usuario ya existe
     const existingUser = await User.findOne({ email });
@@ -64,7 +69,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Crear nuevo usuario
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ nombreUsuario,email, password: hashedPassword });
     await newUser.save();
 
     res.status(200).json({ message: 'Usuario registrado con éxito' });
